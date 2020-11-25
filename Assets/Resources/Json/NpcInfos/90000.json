@@ -1,0 +1,9 @@
+﻿{
+  "npcCode": "90000",
+  "npcName": "왈도",
+  "npcDialogUIPrefabPath": "Prefabs/UI/GameUI/ClosableWnd/Panel_NPCInteract/NPCDialogUI/90000",
+  "dialogMessages": [
+    "안녕하신가! 힘세고 강한 아침, 만일 내게 물어보면 나는 왈도.",
+    "Hello there! Mighty fine morning, if you ask me! I'm Waldo."
+  ]
+}

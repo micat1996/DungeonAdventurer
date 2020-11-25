@@ -1,0 +1,28 @@
+{
+    "itemCode": "11006",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Cloth7",
+    "setAssetPath": "",
+    "itemName": "옷7",
+    "itemDescription": "",
+    "minLevel": 35,
+    "itemType": 1,
+    "localPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localEulerAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localScale": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "value1": "",
+    "value2": 0.0,
+    "value3": 0.0,
+    "value4": 0.0
+}

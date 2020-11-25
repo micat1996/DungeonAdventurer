@@ -1,0 +1,28 @@
+{
+    "itemCode": "13004",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Glove5",
+    "setAssetPath": "",
+    "itemName": "장갑5",
+    "itemDescription": "",
+    "minLevel": 20,
+    "itemType": 3,
+    "localPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localEulerAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localScale": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "value1": "",
+    "value2": 0.0,
+    "value3": 0.0,
+    "value4": 0.0
+}

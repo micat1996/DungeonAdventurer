@@ -1,0 +1,28 @@
+{
+    "itemCode": "10001",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Belt2",
+    "setAssetPath": "",
+    "itemName": "벨트2",
+    "itemDescription": "",
+    "minLevel": 10,
+    "itemType": 0,
+    "localPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localEulerAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localScale": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "value1": "",
+    "value2": 0.0,
+    "value3": 0.0,
+    "value4": 0.0
+}

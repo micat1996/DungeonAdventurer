@@ -1,0 +1,28 @@
+{
+    "itemCode": "12003",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Face4",
+    "setAssetPath": "",
+    "itemName": "얼굴4",
+    "itemDescription": "",
+    "minLevel": 0,
+    "itemType": 2,
+    "localPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localEulerAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localScale": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "value1": "",
+    "value2": 0.0,
+    "value3": 0.0,
+    "value4": 0.0
+}

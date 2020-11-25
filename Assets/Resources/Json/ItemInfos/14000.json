@@ -1,0 +1,28 @@
+{
+    "itemCode": "14000",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Hair1",
+    "setAssetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Hair1Half",
+    "itemName": "머리1",
+    "itemDescription": "",
+    "minLevel": 0,
+    "itemType": 4,
+    "localPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localEulerAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "localScale": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "value1": "",
+    "value2": 0.0,
+    "value3": 0.0,
+    "value4": 0.0
+}
