@@ -40,6 +40,9 @@ public sealed class InventoryItemDragger : MonoBehaviour
 		// 아이템 드래깅중이 아니라면 실행하지 않습니다.
 		if (!isItemDragging) return;
 
+		// 디테일 패널을 닫습니다.
+		_InventoryWnd.CloseDetailPanel();
+
 		// 드래깅중인 아이템 이미지 위치를 마우스의 위치로 설정합니다.
 		_DragImage.rectTransform.anchoredPosition = InputManager.Instance.mousePosition;
 
@@ -76,7 +79,7 @@ public sealed class InventoryItemDragger : MonoBehaviour
 	}
 
 
-	// 슬롯을 드래깅 시킵니다.
+	// 슬롯 아이템 드래깅을 시작합니다.
 	/// - inventorySlotInstance : 드래깅을 시작한 슬롯 객체를 전달합니다.
 	public void StartDragItem(InventorySlot inventorySlotInstance)
 	{

@@ -23,12 +23,18 @@ public class ClosableWnd : MonoBehaviour
 	{
 		if (m_CloseButton)
 		{
-			m_CloseButton.onClick.AddListener(() => closableWndController?.CloseWnd(false, this));
+			m_CloseButton.onClick.AddListener(CloseThisWnd);
 		}
 	}
 
 	protected virtual void Start()
 	{
 		onWndOpened?.Invoke();
+	}
+
+	// 해당 창을 닫습니다.
+	public void CloseThisWnd()
+	{
+		closableWndController?.CloseWnd(false, this);
 	}
 }

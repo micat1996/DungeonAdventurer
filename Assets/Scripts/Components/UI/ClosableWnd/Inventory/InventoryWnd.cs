@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public sealed class InventoryWnd : ClosableWnd
 	// 인벤토리 컴포넌트를 나타냅니다.
 	private PlayerInventory _Inventory;
 
+	// 아이템 디테일 패널 객체를 나타냅니다.
+	private InventorySlotDetailPanel _DetailPanel;
 
 	// 생성된 슬롯 객체들을 저장할 리스트
 	private List<InventorySlot> _InventorySlots = new List<InventorySlot>();
@@ -27,6 +30,7 @@ public sealed class InventoryWnd : ClosableWnd
 
 		// 인벤토리 창 초기화
 		InitializeInventoryWnd();
+
 	}
 
 	// 인벤토리 창을 초기화합니다.
@@ -97,7 +101,47 @@ public sealed class InventoryWnd : ClosableWnd
 			// 슬롯들을 갱신합니다.
 			_InventorySlots[i].UpdateItemSlot();
 		}
-		
+	}
+
+	// 아이템 디테일 패널을 엽니다.
+	public void OpenDetailPanel(InventorySlot slotInstance)
+	{
+		// 빈 슬롯이라면 실행시키지 않습니다.
+		if (slotInstance.slotInfo.isEmpty) return;
+
+		// 아이템을 드래깅 중이라면 실행시키지 않습니다.
+		if (inventoryItemDragger.isItemDragging) return;
+
+		if (!_DetailPanel)
+		{
+			_DetailPanel = closableWndController.AddWnd(
+				ResourceManager.Instance.LoadResource<GameObject>(
+					"Inventory_Detail_Panel",
+					"Prefabs/UI/GameUI/ClosableWnd/InventoryWnd/Panel_ItemDetail").
+					GetComponent<InventorySlotDetailPanel>(),
+				rectTransform);
+		}
+
+		bool fileNotFound;
+		ItemInfo itemInfo = ResourceManager.Instance.LoadJson<ItemInfo>(
+				$"ItemInfos/{slotInstance.slotInfo.itemCode}.json",
+				fileNotFound: out fileNotFound);
+
+		_DetailPanel.UpdateSlotDetailPanel(slotInstance.itemSprite.sprite, itemInfo);
+
+		//_DetailPanel.rectTransform.anchoredPosition = slotInstance.rectTransform.anchoredPosition;
+		_DetailPanel.rectTransform.position = slotInstance.rectTransform.position;
+
+	}
+
+	// 아이템 디테일 패널을 닫습니다.
+	public void CloseDetailPanel()
+	{
+		if (_DetailPanel != null)
+		{
+			_DetailPanel.CloseThisWnd();
+			_DetailPanel = null;
+		}
 	}
 
 }

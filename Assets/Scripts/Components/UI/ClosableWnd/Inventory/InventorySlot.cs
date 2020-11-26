@@ -74,7 +74,8 @@ public sealed class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandl
 
 			_Image_ItemSprite.sprite = itemSprite;
 			_Image_ItemSprite.color = m_NormalColor;
-			_Text_ItemCount.text = _SlotInfo.itemCount.ToString();
+			_Text_ItemCount.text = _SlotInfo.itemCount == 1 ?
+				null : _SlotInfo.itemCount.ToString();
 		}
 	}
 
@@ -106,6 +107,9 @@ public sealed class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandl
 	{
 		// 마우스와 겹친 슬롯 객체를 저장합니다.
 		_InventoryWnd.inventoryItemDragger.overlappedSlot = this;
+
+		// 디테일 패널을 엽니다.
+		_InventoryWnd.OpenDetailPanel(this);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
@@ -116,5 +120,9 @@ public sealed class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandl
 			// 겹친 슬롯을 비웁니다.
 			_InventoryWnd.inventoryItemDragger.overlappedSlot = null;
 		}
+
+		// 디테일 패널을 닫습니다.
+		_InventoryWnd.CloseDetailPanel();
+
 	}
 }
