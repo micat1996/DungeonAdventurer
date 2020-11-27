@@ -101,6 +101,14 @@ public sealed class PlayerInventory : MonoBehaviour
 		_InventoryWnd = null;
 	}
 
+	// 인벤토리에서 인벤토리로 아이템을 옮깁니다.
+	private void InventoryToInventory(int firstSlotindex, int secondSlotIndex)
+	{
+		InventorySlotInfo tempSlotInfo = inventoryItems[firstSlotindex];
+		inventoryItems[firstSlotindex] = inventoryItems[secondSlotIndex];
+		inventoryItems[secondSlotIndex] = tempSlotInfo;
+	}
+
 	// 인벤토리에 아이템을 추가합니다.
 	/// - params
 	///	  - itemCode : 인벤토리에 추가할 아이템 코드
@@ -173,10 +181,27 @@ public sealed class PlayerInventory : MonoBehaviour
 
 
 	// 슬롯 정보를 스왑시킵니다.
-	public void SwapSlotInfo(int firstSlotindex, int secondSlotIndex)
+	public void SwapSlotInfo(ItemSlot draggingSlot, ItemSlot targetSlot)
 	{
-		InventorySlotInfo tempSlotInfo = inventoryItems[firstSlotindex];
-		inventoryItems[firstSlotindex] = inventoryItems[secondSlotIndex];
-		inventoryItems[secondSlotIndex] = tempSlotInfo;
+		switch (draggingSlot.slotType)
+		{
+			case ItemSlotType.InventorySlot 
+			when (targetSlot.slotType == ItemSlotType.InventorySlot) :
+				InventoryToInventory(
+					(draggingSlot as InventorySlot).inventorySlotIndex, 
+					(targetSlot as InventorySlot).inventorySlotIndex);
+				break;
+
+			case ItemSlotType.InventorySlot 
+			when (targetSlot.slotType == ItemSlotType.EquipSlot):
+				break;
+
+			case ItemSlotType.EquipSlot:
+				break;
+		}
+
+
 	}
+
+	
 }

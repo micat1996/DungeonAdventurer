@@ -11,14 +11,14 @@ public sealed class InventoryItemDragger : MonoBehaviour
 	private InventoryWnd _InventoryWnd;
 
 	// 드래깅을 시작한 슬롯 객체를 나타냅니다.
-	private InventorySlot _DraggingSlot;
+	private ItemSlot _DraggingSlot;
 
 	// 드래깅시 마우스 위치로 이동시킬 이미지를 나타냅니다.
 	private Image _DragImage;
 
 
 	// 마우스와 겹쳐있는 슬롯 객체를 나타냅니다.
-	public InventorySlot overlappedSlot { get; set; }
+	public ItemSlot overlappedSlot { get; set; }
 
 	// 아이템 드래깅중 상태를 나타냅니다.
 	public bool isItemDragging => _DragImage != null;
@@ -61,7 +61,7 @@ public sealed class InventoryItemDragger : MonoBehaviour
 		if (overlappedSlot)
 		{
 			// 드래그 시킨 아이템과, 마우스가 올려져 있는 아이템의 정보를 바꿉니다.
-			_Inventory.SwapSlotInfo(_DraggingSlot.inventorySlotIndex, overlappedSlot.inventorySlotIndex);
+			_Inventory.SwapSlotInfo(_DraggingSlot, overlappedSlot);
 
 			// 인벤토리 슬롯들 갱신
 			_InventoryWnd.UpdateInventorySlots();
@@ -81,7 +81,7 @@ public sealed class InventoryItemDragger : MonoBehaviour
 
 	// 슬롯 아이템 드래깅을 시작합니다.
 	/// - inventorySlotInstance : 드래깅을 시작한 슬롯 객체를 전달합니다.
-	public void StartDragItem(InventorySlot inventorySlotInstance)
+	public void StartDragItem(ItemSlot inventorySlotInstance)
 	{
 		// 드래깅시 마우스 위치로 이동시킬 이미지를 생성합니다.
 		void CreateDragItemImage()

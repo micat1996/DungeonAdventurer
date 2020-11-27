@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _PlayerInfo:
-    inventorySlotCount: 10
+    inventorySlotCount: 30
 --- !u!1 &1692108448
 GameObject:
   m_ObjectHideFlags: 0

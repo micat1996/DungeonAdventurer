@@ -2,11 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class InventoryWnd : ClosableWnd
 {
 	[Header("슬롯들의 부모 Transform")]
 	[SerializeField] private RectTransform _ContentTransform;
+
+	[Header("장비 장착 패널 Transform")]
+	[SerializeField] private RectTransform _EquipPanelRectTransform;
+
+	[Header("장비 장착 패널 열기 버튼")]
+	[SerializeField] private Button _Button_OpenEquipPanel;
+
+	// 생성된 장비 장착 슬롯 객체들을 저장할 리스트
+	[Header("장비 장착 슬롯")]
+	[SerializeField] private List<EquipmentSlot> _EquipmentSlots;
+
 
 	// 인벤토리 컴포넌트를 나타냅니다.
 	private PlayerInventory _Inventory;
@@ -14,11 +26,18 @@ public sealed class InventoryWnd : ClosableWnd
 	// 아이템 디테일 패널 객체를 나타냅니다.
 	private InventorySlotDetailPanel _DetailPanel;
 
-	// 생성된 슬롯 객체들을 저장할 리스트
+
+	// 생성된 인벤토리 슬롯 객체들을 저장할 리스트
 	private List<InventorySlot> _InventorySlots = new List<InventorySlot>();
 
 	public InventoryItemDragger inventoryItemDragger { get; private set; }
 
+	// 장비 장착 패널이 열려있는지를 나타냅니다.
+	public bool isEquipPanelOpened { get; private set; }
+
+	// 장비 장착 패널이 열였을 때 / 닫혔을 때 창 크기
+	private const float WndSizeWhenEquipPanelOpened = 820.0f;
+	private const float WndSizeWhenEquipPanelClosed = 470.0f;
 
 	protected override void Awake()
 	{
@@ -31,11 +50,24 @@ public sealed class InventoryWnd : ClosableWnd
 		// 인벤토리 창 초기화
 		InitializeInventoryWnd();
 
+		// 장비 패널 열기 버튼 클릭 이벤트 설정
+		_Button_OpenEquipPanel.onClick.AddListener(() =>
+		{
+			if (isEquipPanelOpened) CloseEquipPanel();
+			else					OpenEquipPanel();
+		});
+
+		// 처음 시작시 장비 장착 패널이 표시되지 않도록 합니다.
+		CloseEquipPanel();
 	}
 
 	// 인벤토리 창을 초기화합니다.
 	private void InitializeInventoryWnd()
 	{
+		// 장비 장착 슬롯들을 초기화합니다.
+		foreach(var i in _EquipmentSlots)
+			i.InitializeItemSlot(this);
+
 
 		// 인벤토리 슬롯을 생성합니다.
 		for (int i = 0; i < PlayerManager.Instance.playerInfo.inventorySlotCount; ++i)
@@ -55,6 +87,15 @@ public sealed class InventoryWnd : ClosableWnd
 		UpdateInventorySlots();
 	}
 
+	// 인벤토리 창 크기를 갱신합니다.
+	private void UpdateInventoryWndSize()
+	{
+		Vector2 newWndSize = rectTransform.sizeDelta;
+		newWndSize.x = (isEquipPanelOpened) ?
+			WndSizeWhenEquipPanelOpened : WndSizeWhenEquipPanelClosed;
+		rectTransform.sizeDelta = newWndSize;
+	}
+
 	// 빈 슬롯을 생성합니다.
 	public InventorySlot CreateEmptySlot()
 	{
@@ -65,10 +106,13 @@ public sealed class InventoryWnd : ClosableWnd
 			_ContentTransform);
 
 		// 슬롯의 아이템 정보를 초기화 시킵니다.
-		newInventorySlot.InitializeInventorySlotInfo(null);
+		newInventorySlot.InitializeItemSlotInfo(null);
 
 		// 생성한 인벤토리 슬롯을 초기화합니다.
-		newInventorySlot.InitializeInventorySlot(this, _InventorySlots.Count);
+		newInventorySlot.InitializeItemSlot(this);
+
+		// 생성한 인벤토리 슬롯 인덱스 설정
+		newInventorySlot.inventorySlotIndex = _InventorySlots.Count;
 
 
 		// 배열에 추가합니다.
@@ -87,7 +131,7 @@ public sealed class InventoryWnd : ClosableWnd
 		InventorySlot newInventorySlot = CreateEmptySlot();
 
 		// 슬롯의 아이템 정보를 초기화 시킵니다.
-		newInventorySlot.InitializeInventorySlotInfo(slotInfo);
+		newInventorySlot.InitializeItemSlotInfo(slotInfo);
 	}
 
 	// 인벤토리 슬롯을 갱신합니다.
@@ -96,7 +140,7 @@ public sealed class InventoryWnd : ClosableWnd
 		for (int i = 0; i < _InventorySlots.Count; ++i)
 		{
 			// 변경된 슬롯 정보를 적용시킵니다.
-			_InventorySlots[i].InitializeInventorySlotInfo(_Inventory.inventoryItems[i]);
+			_InventorySlots[i].InitializeItemSlotInfo(_Inventory.inventoryItems[i]);
 
 			// 슬롯들을 갱신합니다.
 			_InventorySlots[i].UpdateItemSlot();
@@ -104,7 +148,7 @@ public sealed class InventoryWnd : ClosableWnd
 	}
 
 	// 아이템 디테일 패널을 엽니다.
-	public void OpenDetailPanel(InventorySlot slotInstance)
+	public void OpenDetailPanel(ItemSlot slotInstance)
 	{
 		// 빈 슬롯이라면 실행시키지 않습니다.
 		if (slotInstance.slotInfo.isEmpty) return;
@@ -142,6 +186,25 @@ public sealed class InventoryWnd : ClosableWnd
 			_DetailPanel.CloseThisWnd();
 			_DetailPanel = null;
 		}
+	}
+
+	// 장비 장착 패널을 엽니다.
+	public void OpenEquipPanel()
+	{
+		isEquipPanelOpened = true;
+		_EquipPanelRectTransform.gameObject.SetActive(true);
+
+		UpdateInventoryWndSize();
+	}
+
+	// 장비 장착 패널을 닫습니다.
+	public void CloseEquipPanel()
+	{
+		isEquipPanelOpened = false;
+		_EquipPanelRectTransform.gameObject.SetActive(false);
+
+		UpdateInventoryWndSize();
+
 	}
 
 }
