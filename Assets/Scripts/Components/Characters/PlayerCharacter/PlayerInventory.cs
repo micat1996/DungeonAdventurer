@@ -6,9 +6,8 @@ using UnityEngine;
 
 public sealed class PlayerInventory : MonoBehaviour
 {
-
-	// 장착중인 아이템 정보들
-	private List<ItemInfo> _EquipItems = new List<ItemInfo>();
+	// 플레이어 캐릭터 객체를 나타냅니다.
+	private PlayerCharacter _PlayerCharacter;
 
 	// 인벤토리 창 객체를 나타냅니다.
 	private InventoryWnd _InventoryWnd;
@@ -21,7 +20,10 @@ public sealed class PlayerInventory : MonoBehaviour
 	private Vector2 _InventoryWndPrevPosition;
 
 	// 소지중인 아이템 정보들
-	public List<InventorySlotInfo> inventoryItems { get; private set; } = new List<InventorySlotInfo>();
+	public List<ItemSlotInfo> inventoryItems { get; private set; } = new List<ItemSlotInfo>();
+
+	// 장착중인 아이템 정보들
+	public Dictionary<ItemType, ItemSlotInfo> equipItems { get; private set; } = new Dictionary<ItemType, ItemSlotInfo>();
 
 	// 인벤토리 창이 열렸는지를 나타냅니다.
 	public bool isInventoryWndOpened => _InventoryWnd != null;
@@ -31,11 +33,12 @@ public sealed class PlayerInventory : MonoBehaviour
 
 	private void Awake()
 	{
+		_PlayerCharacter = GetComponent<PlayerCharacter>();
 		_ClosableWndController = PlayerManager.Instance.gameUI.closableWndController;
 
 		InitializeInventory();
 		AddItem("10000", 3);
-		AddItem("11004", 12);
+		AddItem("11004", 4);
 		AddItem("15001", 1);
 		AddItem("11001", 2);
 	}
@@ -57,7 +60,16 @@ public sealed class PlayerInventory : MonoBehaviour
 	private void InitializeInventory()
 	{
 		for (int i = 0; i < PlayerManager.Instance.playerInfo.inventorySlotCount; ++i)
-			inventoryItems.Add(new InventorySlotInfo());
+			inventoryItems.Add(new ItemSlotInfo());
+
+		equipItems.Add(ItemType.Hat, new ItemSlotInfo());
+		equipItems.Add(ItemType.ShoulderPad, new ItemSlotInfo());
+		equipItems.Add(ItemType.Backpack, new ItemSlotInfo());
+		equipItems.Add(ItemType.Cloth, new ItemSlotInfo());
+		equipItems.Add(ItemType.Glove, new ItemSlotInfo());
+		equipItems.Add(ItemType.Belt, new ItemSlotInfo());
+		equipItems.Add(ItemType.Sword, new ItemSlotInfo());
+		equipItems.Add(ItemType.Shoes, new ItemSlotInfo());
 
 	}
 
@@ -104,12 +116,43 @@ public sealed class PlayerInventory : MonoBehaviour
 	// 인벤토리에서 인벤토리로 아이템을 옮깁니다.
 	private void InventoryToInventory(int firstSlotindex, int secondSlotIndex)
 	{
-		InventorySlotInfo tempSlotInfo = inventoryItems[firstSlotindex];
+		ItemSlotInfo tempSlotInfo = inventoryItems[firstSlotindex];
 		inventoryItems[firstSlotindex] = inventoryItems[secondSlotIndex];
 		inventoryItems[secondSlotIndex] = tempSlotInfo;
 	}
 
+	// 인벤토리에서 장비 장착 슬롯으로 아이템을 옮깁니다.
+	private void InventoryToEquipSlot(InventorySlot inventorySlot, EquipmentSlot equipSlot)
+	{
+		bool fileNotFound;
+		ItemInfo inventoryItemInfo = ResourceManager.Instance.LoadJson<ItemInfo>(
+			$"ItemInfos/{inventorySlot.slotInfo.itemCode}.json", out fileNotFound);
+
+		// 장비 타입이 다르다면 실행하지 않습니다.
+		if (inventoryItemInfo.itemType != equipSlot.equipSlotType)
+		{
+			equipSlot = _InventoryWnd.equipmentSlots.Find((slot) => slot.equipSlotType == inventoryItemInfo.itemType);
+		}
+
+		// 정보를 변경합니다.
+		ItemSlotInfo tempSlotInfo = inventorySlot.slotInfo;
+		inventorySlot.slotInfo = equipSlot.slotInfo;
+		equipSlot.slotInfo = tempSlotInfo;
+
+		// Mesh 를 갱신합니다.
+		_PlayerCharacter.equipSockets.UpdateMesh(equipSlot.equipSlotType, equipSlot.slotInfo.itemCode);
+	}
+
+	// 장비 장착 슬롯에서 인벤토리 슬롯으로 아이템을 옮깁니다.
+	private void EquipSlotToInventory(EquipmentSlot equipSlot, InventorySlot inventorySlot)
+	{
+		ItemSlotInfo tempSlotInfo = inventorySlot.slotInfo;
+		inventorySlot.slotInfo = equipSlot.slotInfo;
+		equipSlot.slotInfo = tempSlotInfo;
+	}
+
 	// 인벤토리에 아이템을 추가합니다.
+	/// - 장비 아이템이라면 1개만 추가됩니다.
 	/// - params
 	///	  - itemCode : 인벤토리에 추가할 아이템 코드
 	///	  - itemCount : 추가할 아이템 개수
@@ -126,23 +169,33 @@ public sealed class PlayerInventory : MonoBehaviour
 		// 새로운 아이템을 저장할수 있는 빈 슬롯 인덱스를 저장할 변수
 		int firstEmptySlotIndex = noneIndex;
 
+		// 추가 하려는 아이템이 장비 아이템인지를 나타냅니다.
+		bool isEquipmentItem = ItemInfo.IsEquipItem(itemCode);
+
+		// 장비 아이템이라면 아이템 개수를 1 개로 설정합니다
+		itemCount = (isEquipmentItem) ? 1 : itemCount;
+
+
 
 
 		// 리스트에서 동일한 아이템 슬롯과 빈 슬롯을 탐색합니다.
 		for (int i = 0; i < inventoryItems.Count; ++i)
 		{
-			// 추가하려는 아이템과 동일한 아이템이 존재한다면
-			if (inventoryItems[i].itemCode == itemCode)
+			// 장비 아이템이 아니라면
+			if (!isEquipmentItem)
 			{
-				// 인덱스를 저장합니다.
-				slotIndex = i;
+				// 추가하려는 아이템과 동일한 아이템이 존재한다면
+				if (inventoryItems[i].itemCode == itemCode)
+				{
+					// 인덱스를 저장합니다.
+					slotIndex = i;
 
-				// 추가할 수 있는 슬롯의 인덱스를 찾았으므로, 탐색을 종료
-				break;
+					// 추가할 수 있는 슬롯의 인덱스를 찾았으므로, 탐색을 종료
+					break;
+				}
 			}
-
 			// 빈 슬롯을 처음으로 찾았다면
-			else if (firstEmptySlotIndex == noneIndex && inventoryItems[i].isEmpty)
+			if (firstEmptySlotIndex == noneIndex && inventoryItems[i].isEmpty)
 			{
 				// 인덱스를 저장합니다.
 				firstEmptySlotIndex = i;
@@ -172,7 +225,7 @@ public sealed class PlayerInventory : MonoBehaviour
 		else if (firstEmptySlotIndex != noneIndex)
 		{
 			// 찾은 슬롯에 아이템을 추가합니다.
-			inventoryItems[firstEmptySlotIndex] = new InventorySlotInfo(itemCode, itemCount);
+			inventoryItems[firstEmptySlotIndex] = new ItemSlotInfo(itemCode, itemCount);
 		}
 
 		// 아이템 추가 성공
@@ -180,11 +233,13 @@ public sealed class PlayerInventory : MonoBehaviour
 	}
 
 
+
 	// 슬롯 정보를 스왑시킵니다.
 	public void SwapSlotInfo(ItemSlot draggingSlot, ItemSlot targetSlot)
 	{
 		switch (draggingSlot.slotType)
 		{
+			// 인벤토리 슬롯에서 인벤토리 슬롯으로 이동할 때
 			case ItemSlotType.InventorySlot 
 			when (targetSlot.slotType == ItemSlotType.InventorySlot) :
 				InventoryToInventory(
@@ -192,11 +247,20 @@ public sealed class PlayerInventory : MonoBehaviour
 					(targetSlot as InventorySlot).inventorySlotIndex);
 				break;
 
+			// 인벤토리 슬롯에서 장비 장착 슬롯으로 이동할 때
 			case ItemSlotType.InventorySlot 
 			when (targetSlot.slotType == ItemSlotType.EquipSlot):
+				InventoryToEquipSlot(
+					(draggingSlot as InventorySlot), 
+					(targetSlot as EquipmentSlot));
 				break;
 
-			case ItemSlotType.EquipSlot:
+			// 장비 장착 슬롯에서 인벤토리 슬롯으로 이동할 때
+			case ItemSlotType.EquipSlot
+				when (targetSlot.slotType == ItemSlotType.InventorySlot):
+				EquipSlotToInventory(
+					(draggingSlot as EquipmentSlot),
+					(targetSlot as InventorySlot));
 				break;
 		}
 

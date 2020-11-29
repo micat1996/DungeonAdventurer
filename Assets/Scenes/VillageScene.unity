@@ -534,6 +534,85 @@ MonoBehaviour:
   _InteractableLayer:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!1 &1213915915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1213915916}
+  - component: {fileID: 1213915918}
+  - component: {fileID: 1213915917}
+  m_Layer: 0
+  m_Name: Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1213915916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213915915}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4894141985630273}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1213915917
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213915915}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 532c7a2f80133ed41b42e2b7a36ecc44, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1213915918
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213915915}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1523349114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,6 +1453,7 @@ GameObject:
   - component: {fileID: 2056757222}
   - component: {fileID: 2056757221}
   - component: {fileID: 2056757223}
+  - component: {fileID: 2056757224}
   m_Layer: 9
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -1454,6 +1534,7 @@ MonoBehaviour:
   _SpringArm: {fileID: 857373488}
   _Interaction: {fileID: 1205145827}
   _PlayerInventory: {fileID: 2056757223}
+  _EquipSockets: {fileID: 2056757224}
 --- !u!114 &2056757223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,6 +1547,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8f894daf6ab70408c0f79c636e44ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2056757224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056757218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7300f18857da9b42891d43d1ec6e4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Hat: {fileID: 137569172947988623}
+  _ShoulderPad: {fileID: 137791747860207183}
+  _Backpack: {fileID: 33939323464416739}
+  _Cloth: {fileID: 137924320137647513}
+  _Glove: {fileID: 137346523339697269}
+  _Belt: {fileID: 137539810022744409}
+  _Sword: {fileID: 1213915918}
+  _Shoes: {fileID: 137305745235564297}
 --- !u!1001 &2114535303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3321,7 +3422,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1748721075129515}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 1.5420833, z: -1.45944}
+  m_LocalPosition: {x: 0, y: 1.5420833, z: -1.45944}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4505501883857047}
@@ -3742,7 +3843,8 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.95630497, y: -0.023688473, z: 0.99997395}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1213915916}
   m_Father: {fileID: 4043357360225845}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

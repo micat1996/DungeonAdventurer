@@ -378,9 +378,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3701979872552911648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebfbb1ef6df56be4bab3368de615c63b, type: 3}
+  m_Script: {fileID: 11500000, guid: 74c1e1dfcfe9ff7419df8968ad27d6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _SlotType: 0
   _Image_ItemSprite: {fileID: 4029671445521310201}
   _Text_ItemCount: {fileID: 3519348487043595594}
 --- !u!114 &4926852348214944681

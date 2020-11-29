@@ -65,6 +65,12 @@ public sealed class InventoryItemDragger : MonoBehaviour
 
 			// 인벤토리 슬롯들 갱신
 			_InventoryWnd.UpdateInventorySlots();
+
+			// 아이템을 놓은 슬롯이 장비 장착 슬롯일 경우
+			if (overlappedSlot.GetType() == typeof(EquipmentSlot))
+			{
+
+			}
 		}
 
 		// 드래깅에 사용된 이미지 오브젝트를 제거합니다.

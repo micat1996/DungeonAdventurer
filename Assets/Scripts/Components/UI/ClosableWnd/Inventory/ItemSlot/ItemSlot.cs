@@ -29,18 +29,30 @@ public class ItemSlot : MonoBehaviour,
 	// 아이템이 드래깅될 때 슬롯 아이템에 적용될 색상
 	public readonly Color32 m_DraggingColor;
 
-	// 슬롯이 가지는 아이템 정보
-	private InventorySlotInfo _SlotInfo;
 
 
+	// 아이템 슬롯 타입을 나타냅니다.
+	public ItemSlotType slotType => _SlotType;
 
-	public ref InventorySlotInfo slotInfo => ref _SlotInfo;
+	// 슬롯 정보를 나타냅니다.
+	public ItemSlotInfo slotInfo
+	{
+		get => 
+		(slotType == ItemSlotType.InventorySlot) ? 
+		inventoryWnd.inventory.inventoryItems[(this as InventorySlot).inventorySlotIndex] :
+		inventoryWnd.inventory.equipItems[(this as EquipmentSlot).equipSlotType];
+
+		set
+		{
+			if (slotType == ItemSlotType.InventorySlot)
+				inventoryWnd.inventory.inventoryItems[(this as InventorySlot).inventorySlotIndex] = value;
+			else inventoryWnd.inventory.equipItems[(this as EquipmentSlot).equipSlotType] = value;
+		}
+	}
 
 	// 아이템 이미지를 표시하는 Image 객체를 나타냅니다.
 	public Image itemSprite => _Image_ItemSprite;
 
-	// 아이템 슬롯 타입을 나타냅니다.
-	public ItemSlotType slotType => _SlotType;
 
 	public RectTransform rectTransform => transform as RectTransform;
 
@@ -58,7 +70,7 @@ public class ItemSlot : MonoBehaviour,
 	public virtual void UpdateItemSlot()
 	{
 		// 슬롯을 비우도록 설정했다면
-		if (_SlotInfo.isEmpty)
+		if (slotInfo.isEmpty)
 		{
 			_Image_ItemSprite.sprite = null;
 			_Image_ItemSprite.color = _EmptyColor;
@@ -69,8 +81,8 @@ public class ItemSlot : MonoBehaviour,
 		{
 			// 아이템 코드를 이용하여 Json 파일을 읽어옵니다.
 			Sprite itemSprite = ResourceManager.Instance.LoadResource<Sprite>(
-				$"Item_Sprite_{_SlotInfo.itemCode}",
-				$"ModularRPGHeroesPBR/Prefabs/ItemSprites/{_SlotInfo.itemCode}");
+				$"Item_Sprite_{slotInfo.itemCode}",
+				$"ModularRPGHeroesPBR/Prefabs/ItemSprites/{slotInfo.itemCode}");
 
 			_Image_ItemSprite.sprite = itemSprite;
 			_Image_ItemSprite.color = m_NormalColor;
@@ -79,10 +91,10 @@ public class ItemSlot : MonoBehaviour,
 
 
 	// 인벤토리 슬롯 정보를 초기화합니다.
-	public void InitializeItemSlotInfo(InventorySlotInfo? newSlotInfo)
-	{
-		_SlotInfo = newSlotInfo ?? new InventorySlotInfo();
-	}
+	//public void InitializeItemSlotInfo(InventorySlotInfo? newSlotInfo)
+	//{
+	//	_SlotInfo = newSlotInfo ?? new InventorySlotInfo();
+	//}
 
 	public virtual void InitializeItemSlot(InventoryWnd inventoryWnd)
 	{

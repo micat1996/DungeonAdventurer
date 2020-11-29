@@ -77,4 +77,19 @@ public struct ItemInfo
 
 		return loadedItemInfo;
 	}
+
+	// 해다 아이템이 장비 아이템인지 확인합니다.
+	public static bool IsEquipItem(string itemCode)
+	{
+		// 아이템 코드가 빈 문자열이라면 false 반환
+		if (string.IsNullOrEmpty(itemCode)) return false;
+
+		// 아이템 코드를 int 형식으로 변환하여 저장합니다.
+		int intItemCode = int.Parse(itemCode);
+
+		// 장비 아이템 범위의 코드라면 true 를 반환합니다.
+		return (10000 <= intItemCode && intItemCode <= 20000);
+		
+
+	}
 }
