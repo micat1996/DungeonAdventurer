@@ -1567,6 +1567,9 @@ MonoBehaviour:
   _Belt: {fileID: 137539810022744409}
   _Sword: {fileID: 1213915918}
   _Shoes: {fileID: 137305745235564297}
+  _Face: {fileID: 137779467551788713}
+  _Hair: {fileID: 137783862698877085}
+  _Hair_Half: {fileID: 137105873395764017}
 --- !u!1001 &2114535303
 PrefabInstance:
   m_ObjectHideFlags: 0

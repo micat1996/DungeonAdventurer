@@ -41,6 +41,34 @@ public sealed class PlayerInventory : MonoBehaviour
 		AddItem("11004", 4);
 		AddItem("15001", 1);
 		AddItem("11001", 2);
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+	private void Start()
+	{
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Hat, equipItems[ItemType.Hat].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.ShoulderPad, equipItems[ItemType.ShoulderPad].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Backpack, equipItems[ItemType.Backpack].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Cloth, equipItems[ItemType.Cloth].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Glove, equipItems[ItemType.Glove].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Belt, equipItems[ItemType.Belt].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Sword, equipItems[ItemType.Sword].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Shoes, equipItems[ItemType.Shoes].itemCode);
+
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Face, equipItems[ItemType.Face].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Hair, equipItems[ItemType.Hair].itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(ItemType.Hair_Half, equipItems[ItemType.Hair_Half].itemCode);
+
 	}
 
 
@@ -65,12 +93,15 @@ public sealed class PlayerInventory : MonoBehaviour
 		equipItems.Add(ItemType.Hat, new ItemSlotInfo());
 		equipItems.Add(ItemType.ShoulderPad, new ItemSlotInfo());
 		equipItems.Add(ItemType.Backpack, new ItemSlotInfo());
-		equipItems.Add(ItemType.Cloth, new ItemSlotInfo());
-		equipItems.Add(ItemType.Glove, new ItemSlotInfo());
+		equipItems.Add(ItemType.Cloth, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Cloth)));
+		equipItems.Add(ItemType.Glove, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Glove)));
 		equipItems.Add(ItemType.Belt, new ItemSlotInfo());
 		equipItems.Add(ItemType.Sword, new ItemSlotInfo());
-		equipItems.Add(ItemType.Shoes, new ItemSlotInfo());
+		equipItems.Add(ItemType.Shoes, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Shoes)));
 
+		equipItems.Add(ItemType.Face, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Face)));
+		equipItems.Add(ItemType.Hair, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Hair)));
+		equipItems.Add(ItemType.Hair_Half, new ItemSlotInfo(ItemInfo.GetBasicItemCode(ItemType.Hair_Half)));
 	}
 
 	// 인벤토리 창을 엽니다.
@@ -88,6 +119,9 @@ public sealed class PlayerInventory : MonoBehaviour
 		// 인벤토리 창이 닫힐 때 실행할 내용을 정의합니다.
 		_InventoryWnd.onWndClosed += () =>
 		{
+			// 인벤토리 창의 위치를 저장합니다.
+			_InventoryWndPrevPosition = _InventoryWnd.rectTransform.anchoredPosition;
+
 			// 아무 창이 열려있지 않다면
 			if (!_ClosableWndController.isAnyWndOpened)
 				// 입력 모드를 설정합니다.
@@ -103,8 +137,6 @@ public sealed class PlayerInventory : MonoBehaviour
 	// 인벤토리 창을 닫습니다.
 	private void CloseInventory()
 	{
-		// 창의 위치를 저장합니다.
-		_InventoryWndPrevPosition = _InventoryWnd.rectTransform.anchoredPosition;
 
 		// 인벤토리 창을 닫습니다.
 		_ClosableWndController.CloseWnd(false, _InventoryWnd);
@@ -124,11 +156,10 @@ public sealed class PlayerInventory : MonoBehaviour
 	// 인벤토리에서 장비 장착 슬롯으로 아이템을 옮깁니다.
 	private void InventoryToEquipSlot(InventorySlot inventorySlot, EquipmentSlot equipSlot)
 	{
-		bool fileNotFound;
-		ItemInfo inventoryItemInfo = ResourceManager.Instance.LoadJson<ItemInfo>(
-			$"ItemInfos/{inventorySlot.slotInfo.itemCode}.json", out fileNotFound);
+		// 인벤토리의 아이템 정보를 저장합니다.
+		ItemInfo inventoryItemInfo = ItemInfo.LoadItemInfo(inventorySlot.slotInfo.itemCode);
 
-		// 장비 타입이 다르다면 실행하지 않습니다.
+		// 장비 타입이 다르다면 같은 타입의 슬롯을 찾습니다.
 		if (inventoryItemInfo.itemType != equipSlot.equipSlotType)
 		{
 			equipSlot = _InventoryWnd.equipmentSlots.Find((slot) => slot.equipSlotType == inventoryItemInfo.itemType);
@@ -137,18 +168,53 @@ public sealed class PlayerInventory : MonoBehaviour
 		// 정보를 변경합니다.
 		ItemSlotInfo tempSlotInfo = inventorySlot.slotInfo;
 		inventorySlot.slotInfo = equipSlot.slotInfo;
-		equipSlot.slotInfo = tempSlotInfo;
+
+		// 슬롯에 정보를 설정합니다.
+		SetEquipmentItem(equipSlot.equipSlotType, tempSlotInfo);
+
+	}
+
+	// 장비 정보를 변경합니다.
+	private void SetEquipmentItem(ItemType equipItemType, ItemSlotInfo itemSlotInfo)
+	{
+		// 아이템 정보를 설정합니다.
+		equipItems[equipItemType] = itemSlotInfo;
+
+		// 설정하려는 아이템 타입이 Hair 라면 Hair_Half 도 함께 변경되도록 합니다.
+		if (equipItemType == ItemType.Hair)
+			equipItems[ItemType.Hair_Half] = itemSlotInfo;
+
 
 		// Mesh 를 갱신합니다.
-		_PlayerCharacter.equipSockets.UpdateMesh(equipSlot.equipSlotType, equipSlot.slotInfo.itemCode);
+		_PlayerCharacter.equipSockets.UpdateMesh(equipItemType, itemSlotInfo.itemCode);
 	}
 
 	// 장비 장착 슬롯에서 인벤토리 슬롯으로 아이템을 옮깁니다.
 	private void EquipSlotToInventory(EquipmentSlot equipSlot, InventorySlot inventorySlot)
 	{
+		// 만약 인벤토리 슬롯이 비어있다면 실행하지 않습니다.
+		//if (inventorySlot.slotInfo.isEmpty) return;
+
+		// 기본 아이템이 존재해야 하는 아이템이라면
+		/// - Face, Hair, Hair_Half, Cloth, Glove, Shoes 는 항상 표시되어야 하는 Mesh 이므로
+		///   해당 Mesh 들이 null 이 되어 표시되지 않는 현상을 방지합니다.
+		if (!string.IsNullOrEmpty(ItemInfo.GetBasicItemCode(equipSlot.equipSlotType)))
+		{
+			// 인벤토리 슬롯이 비어있다면 실행하지 않습니다.
+			if (inventorySlot.slotInfo.isEmpty) return;
+
+			// 바꾸려는 아이템의 타입이 서로 다르다면 실행하지 않습니다.
+			if (ItemInfo.LoadItemInfo(inventorySlot.slotInfo.itemCode).itemType != equipSlot.equipSlotType) return;
+		}
+
+
+
 		ItemSlotInfo tempSlotInfo = inventorySlot.slotInfo;
+		ItemType tempItemType = equipSlot.equipSlotType;
+
 		inventorySlot.slotInfo = equipSlot.slotInfo;
-		equipSlot.slotInfo = tempSlotInfo;
+
+		SetEquipmentItem(tempItemType, tempSlotInfo);
 	}
 
 	// 인벤토리에 아이템을 추가합니다.

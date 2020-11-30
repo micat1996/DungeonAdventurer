@@ -78,7 +78,7 @@ public struct ItemInfo
 		return loadedItemInfo;
 	}
 
-	// 해다 아이템이 장비 아이템인지 확인합니다.
+	// 해당 아이템이 장비 아이템인지 확인합니다.
 	public static bool IsEquipItem(string itemCode)
 	{
 		// 아이템 코드가 빈 문자열이라면 false 반환
@@ -89,7 +89,25 @@ public struct ItemInfo
 
 		// 장비 아이템 범위의 코드라면 true 를 반환합니다.
 		return (10000 <= intItemCode && intItemCode <= 20000);
-		
-
 	}
+
+	// 기본 아이템 코드를 얻습니다.
+	/// - 캐릭터를 이루는 기본 Mesh 아이템 코드를 반환합니다.
+	public static string GetBasicItemCode(ItemType itemType)
+	{
+		switch (itemType)
+		{
+			case ItemType.Face:			return "12000";
+			case ItemType.Hair:			return "14000";
+			case ItemType.Hair_Half:	return "14000";
+			case ItemType.Cloth:		return "11000";
+			case ItemType.Glove:		return "13000";
+			case ItemType.Shoes:		return "15000";
+			default:					return null;
+		}
+	}
+
+	// Hat 타입일 경우 Half_Hair 를 사용하는지를 확인합니다.
+	public bool UseHalfHair()
+	{ return value1 == "Hair_Half"; }
 }

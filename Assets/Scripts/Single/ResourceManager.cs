@@ -93,7 +93,7 @@ public sealed class ResourceManager : ManagerClassBase<ResourceManager>
 
 	private void Awake()
 	{
-		string[] itemCodes =
+		string[] itemCodes = 
 		{
 			"10000",
 			"10001",
