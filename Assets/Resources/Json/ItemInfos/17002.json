@@ -1,11 +1,11 @@
 {
     "itemCode": "17002",
-    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/Shoe3",
+    "assetPath": "ModularRPGHeroesPBR/Prefabs/Parts/ShoulderPad3",
     "setAssetPath": "",
     "itemName": "어깨 보호대3",
     "itemDescription": "",
     "minLevel": 15,
-    "itemType": 6,
+    "itemType": 7,
     "localPosition": {
         "x": 0.0,
         "y": 0.0,

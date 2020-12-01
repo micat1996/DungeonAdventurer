@@ -136,10 +136,7 @@ public sealed class PlayerCharacterEquipSockets : MonoBehaviour
 					}
 				}
 
-				(_MeshComponents[equipmentItemType] as SkinnedMeshRenderer).sharedMesh =
-					ResourceManager.Instance.LoadResource<Mesh>(
-						$"Mesh_{itemCode}",
-						itemInfo.assetPath);
+				(_MeshComponents[equipmentItemType] as SkinnedMeshRenderer).sharedMesh = itemMesh;
 			}
 		}
 	}

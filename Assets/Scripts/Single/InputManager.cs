@@ -27,6 +27,8 @@ public sealed class InputManager : ManagerClassBase<InputManager>
 	public bool		gameInputJumpKey			=> (isGameInputMode) ? Input.GetKey(KeyCode.Space) : false;
 	public bool		gameInputInteractionKeyDown	=> (isGameInputMode) ? Input.GetKeyDown(KeyCode.F) : false;
 
+	public bool		gameInputRegularAttack		=> (isGameInputMode) ? Input.GetMouseButtonDown(0) : false;
+
 	// UI
 	public Vector2	mousePosition				=> (isUIInputMode) ? (Vector2)Input.mousePosition / GameStatics.screenRatio : Vector2.zero;
 	public bool		mouseButtonRelease			=> (isUIInputMode) ? Input.GetMouseButtonUp(0) : false;

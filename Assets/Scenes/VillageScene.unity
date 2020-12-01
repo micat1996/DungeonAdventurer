@@ -1453,6 +1453,7 @@ GameObject:
   - component: {fileID: 2056757222}
   - component: {fileID: 2056757221}
   - component: {fileID: 2056757223}
+  - component: {fileID: 2056757225}
   - component: {fileID: 2056757224}
   m_Layer: 9
   m_Name: PlayerCharacter
@@ -1535,6 +1536,8 @@ MonoBehaviour:
   _Interaction: {fileID: 1205145827}
   _PlayerInventory: {fileID: 2056757223}
   _EquipSockets: {fileID: 2056757224}
+  _PlayerAttack: {fileID: 2056757225}
+  _AnimatorController: {fileID: 1377049516186562}
 --- !u!114 &2056757223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1570,6 +1573,18 @@ MonoBehaviour:
   _Face: {fileID: 137779467551788713}
   _Hair: {fileID: 137783862698877085}
   _Hair_Half: {fileID: 137105873395764017}
+--- !u!114 &2056757225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056757218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22277ee6b2c2748a325fd1cdf51a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2114535303
 PrefabInstance:
   m_ObjectHideFlags: 0
