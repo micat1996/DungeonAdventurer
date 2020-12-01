@@ -61,8 +61,6 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
     /// - 해당 값은 속도에 더해집니다.
     private Vector3 _ImpulseVelocity;
 
-    // 이동 가능 상태를 나타냅니다.
-    private bool _IsMovable = true;
 
 //  --------- Jump
     // 남은 점프 카운트
@@ -100,17 +98,23 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
     public bool isGrounded
     { get; private set; }
 
+    // 이동 가능 상태를 나타냅니다.
+    public bool isMovable { get; private set; } = true;
+
 	// 점프 가능 상태를 나타냅니다.
 	public bool isJumpable =>
 
         // 이동 가능 상태이며
-        _IsMovable
+        isMovable
 
         // 땅에 닿아있거나, 남은 점프 카운트가 0 보다 크고
         && (isGrounded || (_RemainJumpCount > 0))
 
+        // 공격중이 아닌 경우, 
+        && !_PlayerCharacter.playerAttack.isRegularAttacking
+
         // 점프 입력이 끝났을 경우 점프할 수 있도록 합니다.
-		&& _IsJumpInputFinished;
+        && _IsJumpInputFinished;
 
 	// 땅으로 착지시 호출되는 대리자입니다.
     /// - Param : 남은 점프 카운트
@@ -141,8 +145,8 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
         _InputVector = Vector3.zero;
 
         // 이동 입력 값을 저장합니다.
-        _InputVector.x = InputManager.Instance.gameInputHorizontal;
-        _InputVector.z = InputManager.Instance.gameInputVertical;
+        _InputVector.x = _PlayerCharacter.playerAttack.isRegularAttacking ? 0.0f : InputManager.Instance.gameInputHorizontal;
+        _InputVector.z = _PlayerCharacter.playerAttack.isRegularAttacking ? 0.0f : InputManager.Instance.gameInputVertical;
 
         // 이동 입력 값을 카메라 방향으로 변환합니다.
         _InputVector = _PlayerCharacter.springArm.InputToCameraDirection(_InputVector);
@@ -184,7 +188,7 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
             float currentVelocityY = _TargetVelocity.y;
 
             // 목표 속도를 저장합니다.
-            Vector3 currentVelocity = (_IsMovable) ? _TargetVelocity : Vector3.zero;
+            Vector3 currentVelocity = (isMovable) ? _TargetVelocity : Vector3.zero;
 
             // 현재 속도를 저장합니다.
             _Velocity = characterController.velocity * Time.deltaTime;
@@ -297,7 +301,7 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
             {
                 // 남은 점프 카운트가 _MaxJumpCount 와 일치할 경우 
                 // 지형에서 떨어지는 상태이므로 점프 카운트를 감소시기며, 점프 상태로 설정합니다.
-                if (_RemainJumpCount == _MaxJumpCount && _IsMovable)
+                if (_RemainJumpCount == _MaxJumpCount && isMovable)
                 {
                     // 점프 카운트 1 감소
                     --_RemainJumpCount;
@@ -359,7 +363,7 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
         if (!_UseOrientRotationToMovement) return;
 
         // 이동 불가능 상태라면 실행하지 않습니다.
-        if (!_IsMovable) return;
+        if (!isMovable) return;
 
         // 이동 입력이 없을 경우 실행하지 않습니다.
         if (_InputVector.magnitude <= characterController.minMoveDistance) return;
@@ -394,13 +398,13 @@ public sealed class PlayerCharacterMovement : MonoBehaviour
     // 이동을 멈춥니다.
     public void StopMove()
     {
-        _IsMovable = false;
+        isMovable = false;
     }
 
     // 이동을 허용합니다.
     public void AllowMove()
     {
-        _IsMovable = true;
+        isMovable = true;
     }
 
 

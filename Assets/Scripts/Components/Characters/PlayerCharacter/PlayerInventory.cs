@@ -40,7 +40,8 @@ public sealed class PlayerInventory : MonoBehaviour
 		AddItem("10000", 3);
 		AddItem("11004", 4);
 		AddItem("15001", 1);
-		AddItem("11001", 2);
+		AddItem("15001", 1);
+		AddItem("19001", 2);
 
 
 

@@ -20,6 +20,7 @@ public sealed class InputManager : ManagerClassBase<InputManager>
 	public float	gameMouseX					=> (Input.GetMouseButton(1) || (isGameOnly && !cursorVisibility)) ? Input.GetAxisRaw("Mouse X") : 0.0f;
 	public float	gameMouseY					=> (Input.GetMouseButton(1) || (isGameOnly && !cursorVisibility)) ? Input.GetAxisRaw("Mouse Y") : 0.0f;
 	public float	gameMouseWheel				=> (isGameOnly) ? Input.GetAxisRaw("Mouse ScrollWheel") : 0.0f;
+	public bool		gameInputRegularAttack		=> (isGameOnly) ? Input.GetMouseButtonDown(0) : false;
 
 	// Game
 	public float	gameInputHorizontal			=> (isGameInputMode) ? Input.GetAxisRaw("Horizontal") : 0.0f;
@@ -27,7 +28,6 @@ public sealed class InputManager : ManagerClassBase<InputManager>
 	public bool		gameInputJumpKey			=> (isGameInputMode) ? Input.GetKey(KeyCode.Space) : false;
 	public bool		gameInputInteractionKeyDown	=> (isGameInputMode) ? Input.GetKeyDown(KeyCode.F) : false;
 
-	public bool		gameInputRegularAttack		=> (isGameInputMode) ? Input.GetMouseButtonDown(0) : false;
 
 	// UI
 	public Vector2	mousePosition				=> (isUIInputMode) ? (Vector2)Input.mousePosition / GameStatics.screenRatio : Vector2.zero;
