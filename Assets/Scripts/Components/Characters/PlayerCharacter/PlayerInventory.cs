@@ -211,11 +211,8 @@ public sealed class PlayerInventory : MonoBehaviour
 
 
 		ItemSlotInfo tempSlotInfo = inventorySlot.slotInfo;
-		ItemType tempItemType = equipSlot.equipSlotType;
-
 		inventorySlot.slotInfo = equipSlot.slotInfo;
-
-		SetEquipmentItem(tempItemType, tempSlotInfo);
+		SetEquipmentItem(equipSlot.equipSlotType, tempSlotInfo);
 	}
 
 	// 인벤토리에 아이템을 추가합니다.
