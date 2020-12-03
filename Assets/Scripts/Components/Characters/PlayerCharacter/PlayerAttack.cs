@@ -35,7 +35,7 @@ public sealed class PlayerAttack : MonoBehaviour
 	private void Awake()
 	{
 		_PlayerCharacter = GetComponent<PlayerCharacter>();
-		_AnimatorController = PlayerManager.Instance.playerCharacter.animatorController;
+		_AnimatorController = _PlayerCharacter.animatorController;
 
 		// 연계 공격을 할 때마다 실행할 내용을 정의합니다.
 		onRegularAttackStarted += () =>

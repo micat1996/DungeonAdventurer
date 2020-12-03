@@ -4,15 +4,20 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(EnemyAttack))]
 [RequireComponent(typeof(BehaviorController))]
-public sealed class EnemyCharacter : MonoBehaviour
+public sealed class EnemyCharacter : HpableCharacter
 {
 	public NavMeshAgent navMeshAgent { get; private set; }
+	public EnemyAttack enemyAttack { get; private set; }
 	public BehaviorController behaviorController { get; private set; }
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		navMeshAgent = GetComponent<NavMeshAgent>();
+		enemyAttack = GetComponent<EnemyAttack>();
 		behaviorController = GetComponent<BehaviorController>();
 	}
 

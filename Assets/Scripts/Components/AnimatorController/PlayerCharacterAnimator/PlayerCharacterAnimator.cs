@@ -55,7 +55,7 @@ public sealed class PlayerCharacterAnimator : AnimatorController
 	}
 
 	// 기본 공격 애니메이션을 재생합니다.
-	public void PlayRegularAttackAnimation(RegularAttackCombo combo, bool crossFade = false)
+	public void PlayRegularAttackAnimation(RegularAttackCombo combo)
 	{
 		//if (crossFade)
 		//	animator.CrossFade($"RegularAttack_{combo.ToString()}", 0.1f);
@@ -77,7 +77,7 @@ public sealed class PlayerCharacterAnimator : AnimatorController
 	private void AnimEvent_TryComboRegularAttack()
 	{
 		if (_PlayerCharacter.playerAttack.nextComboRegularAttack)
-			PlayRegularAttackAnimation(_PlayerCharacter.playerAttack.regularAttackCombo + 1, true);
+			PlayRegularAttackAnimation(_PlayerCharacter.playerAttack.regularAttackCombo + 1);
 
 	}
 

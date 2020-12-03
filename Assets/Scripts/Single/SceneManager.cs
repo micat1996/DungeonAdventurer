@@ -19,6 +19,11 @@ public sealed class SceneManager : ManagerClassBase<SceneManager>
 		UnityEngine.SceneManagement.SceneManager.LoadScene("LoadingScene");
 	}
 
+	public override void OnSceneChanged(string newSceneName)
+	{
+		LevelInstance.ClearLevelInstance();
+	}
+
 
 
 

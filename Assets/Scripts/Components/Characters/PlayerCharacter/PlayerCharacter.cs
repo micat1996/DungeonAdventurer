@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerCharacterMovement))]
-public sealed class PlayerCharacter : MonoBehaviour
+public sealed class PlayerCharacter : HpableCharacter
 {
 	[SerializeField] private ZoomableSpringArm _SpringArm;
 	[SerializeField] private PlayerInteraction _Interaction;
@@ -22,8 +22,10 @@ public sealed class PlayerCharacter : MonoBehaviour
 	public PlayerCharacterAnimator animatorController => _AnimatorController;
 
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		playerCharacterMovement = GetComponent<PlayerCharacterMovement>();
 	}
 }

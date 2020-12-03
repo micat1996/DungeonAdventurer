@@ -18,10 +18,11 @@ public abstract class ManagerClassBase<T> : MonoBehaviour,
     public abstract void InitializeManagerClass();
 
     // 씬 변경 시작시 호출되는 메서드입니다.
-    public virtual void OnSceneChanged(string newSceneName) { }
+    public virtual void OnSceneLoadStarted() { }
 
     // 씬 변경후 호출되는 메서드입니다.
-    public virtual void OnSceneLoadStarted() { }
+    public virtual void OnSceneChanged(string newSceneName) { }
+
 
 
 

@@ -32,6 +32,7 @@ public class AIBH_TrackingPlayer : AIBehaviorBase
 				_EnemyCharacter.navMeshAgent.SetDestination(_PlayerCharacter.transform.position);
 			}
 
+			_EnemyCharacter.navMeshAgent.SetDestination(transform.position);
 			behaviourFinished = true;
 		}
 
