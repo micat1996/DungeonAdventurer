@@ -59,6 +59,9 @@ public sealed class InventoryWnd : ClosableWnd
 			else					OpenEquipPanel();
 		});
 
+		// 인벤토리 창이 닫힐 때 디테일 패널도 닫도록 합니다.
+		onWndClosed += CloseDetailPanel;
+
 		// 처음 시작시 장비 장착 패널이 표시되지 않도록 합니다.
 		CloseEquipPanel();
 	}
@@ -131,7 +134,6 @@ public sealed class InventoryWnd : ClosableWnd
 			// 장비 슬롯들을 갱신합니다.
 			equipSlot.UpdateItemSlot();
 		}
-
 	}
 
 	// 아이템 디테일 패널을 엽니다.

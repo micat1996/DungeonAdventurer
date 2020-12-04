@@ -42,17 +42,6 @@ public sealed class PlayerInventory : MonoBehaviour
 		AddItem("15001", 1);
 		AddItem("15001", 1);
 		AddItem("19001", 2);
-
-
-
-
-
-
-
-
-
-
-
 	}
 
 	private void Start()

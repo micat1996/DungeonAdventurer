@@ -7,7 +7,7 @@ public sealed class LevelInstance : MonoBehaviour
 {
 	private static LevelInstance _LevelInstance;
 	public static LevelInstance levelInstance => _LevelInstance = _LevelInstance ??
-		new GameObject().AddComponent<LevelInstance>();
+		(_LevelInstance = new GameObject().AddComponent<LevelInstance>());
 
 	public Dictionary<Collider, HpableCharacter> hpableCharacters = new Dictionary<Collider, HpableCharacter>();
 
